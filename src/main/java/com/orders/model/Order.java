@@ -32,6 +32,7 @@ public class Order {
 	public void setFrId(String frId) {
 		this.frId = frId;
 	}
+	
 	public String getPoNum() {
 		return poNum;
 	}
