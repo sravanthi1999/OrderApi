@@ -13,17 +13,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.orders.model.Order;
+import com.orders.repo.OrderRepo;
 import com.orders.service.OrderService;
 
 //import antlr.collections.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000"})
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
 	
 	@Autowired
 	OrderService orderService;
+	
+	@Autowired
+	OrderRepo orderRepo;
 	
 	@GetMapping("/allorders")
 	public List<Order> getOrders()
@@ -50,4 +54,25 @@ public class OrderController {
 	{
 		return orderService.getbyOrderIdAndFrId(orderId, frId);
 	}
+	
+	@GetMapping("/paginate/ids")
+	@ResponseBody
+	public List<Order> paginateOrderIdAndFrId(@RequestParam int orderId, @RequestParam int pageNum,@RequestParam int pageSize)
+	{
+		return orderService.paginateOrderId(orderId,pageNum,pageSize);
+	}
+	
+	@GetMapping("/orderspage")
+	@ResponseBody
+	public List<Order> paginate(@RequestParam int pageNum,@RequestParam int pageSize){
+		
+		return orderService.paginate(pageNum,pageSize);
+	}
+	
+//	@GetMapping("/orderspage")
+//	Page<Order> paginate(Pageable pageable)
+//	{
+//		return orderRepo.findAll(pageable);
+//	}
+	
 }
