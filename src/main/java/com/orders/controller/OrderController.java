@@ -4,23 +4,30 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.orders.model.Order;
+import com.orders.model.OrderStatus;
 import com.orders.service.OrderService;
 
+//import com.bezkoder.spring.files.excel.helper.ExcelHelper;
 //import antlr.collections.List;
 
-@CrossOrigin(origins = {"http://localhost:3000"})
+//@CrossOrigin(origins = {"http://localhost:3001","http://localhost:3000","http://localhost:3002"})
 @RestController
 @RequestMapping("/orders")
+//@CrossOrigin(origins="*", value = {"*"}, exposedHeaders = {"Content-Disposition"})
+@CrossOrigin(origins = "*", methods = {RequestMethod.POST,RequestMethod.OPTIONS}, allowedHeaders = {"Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"}, exposedHeaders = {"Content-Disposition","Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"})
 public class OrderController {
 
 	@Autowired
@@ -33,6 +40,13 @@ public class OrderController {
 	public List<Order> getOrders()
 	{
 		return orderService.allOrders();
+
+	}
+	
+	@GetMapping("/all-order-status")
+	public OrderStatus[] getOrderStatus()
+	{
+		return OrderStatus.values();
 
 	}
 
@@ -84,5 +98,18 @@ public class OrderController {
 	{
 		return orderService.paginateOrderId(orderId,pageNum,pageSize);
 	}
-
+	
+	
+	@PostMapping(path="upload")
+	public List<Order> reaadXl(@RequestParam("file")  MultipartFile file)
+	{
+		System.out.println(file.getOriginalFilename());
+		
+//		if (ExcelHelper.hasExcelFormat(file)) {
+//			System.out.println("");
+//		}
+		
+		return null;
+		
+	}
 }
